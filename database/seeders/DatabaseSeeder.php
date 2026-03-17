@@ -15,11 +15,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::query()->updateOrCreate(
+            ['email' => 'admin@traveleasy.nl'],
+            ['name' => 'admin', 'role' => User::ROLE_ADMINISTRATOR, 'password' => 'password']
+        );
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::query()->updateOrCreate(
+            ['email' => 'manager@traveleasy.nl'],
+            ['name' => 'manager', 'role' => User::ROLE_MANAGER, 'password' => 'password']
+        );
+
+        User::query()->updateOrCreate(
+            ['email' => 'reisadviseur@traveleasy.nl'],
+            ['name' => 'reisadviseur', 'role' => User::ROLE_REISADVISEUR, 'password' => 'password']
+        );
+
+        User::query()->updateOrCreate(
+            ['email' => 'financieel@traveleasy.nl'],
+            ['name' => 'financieel', 'role' => User::ROLE_FINANCIEEL_MEDEWERKER, 'password' => 'password']
+        );
+
+        $this->call(BookingSeeder::class);
     }
 }

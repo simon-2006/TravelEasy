@@ -12,6 +12,18 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    public const ROLE_ADMINISTRATOR = 'Administrator';
+    public const ROLE_REISADVISEUR = 'Reisadviseur';
+    public const ROLE_FINANCIEEL_MEDEWERKER = 'Financieel Medewerker';
+    public const ROLE_MANAGER = 'Manager';
+
+    public const ROLES = [
+        self::ROLE_ADMINISTRATOR,
+        self::ROLE_REISADVISEUR,
+        self::ROLE_FINANCIEEL_MEDEWERKER,
+        self::ROLE_MANAGER,
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +32,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'role',
         'password',
     ];
 
@@ -44,5 +57,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function canViewAccountOverview(): bool
+    {
+        return in_array($this->role, [self::ROLE_ADMINISTRATOR, self::ROLE_MANAGER], true);
+    }
+
+    public function canManageDashboard(): bool
+    {
+        return $this->role === self::ROLE_ADMINISTRATOR;
     }
 }
