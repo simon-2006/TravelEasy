@@ -31,4 +31,6 @@ Route::middleware(['auth', 'can:manage-dashboard'])
             ->name('index');
         Route::get('/boekingen', [ManagementDashboardController::class, 'bookings'])
             ->name('bookings');
+        Route::get('/omzet', [ManagementDashboardController::class, 'revenue'])
+            ->name('revenue');
     });

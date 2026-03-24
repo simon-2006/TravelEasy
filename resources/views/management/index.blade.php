@@ -83,7 +83,12 @@
 <div class="management-shell">
     <div class="management-head">
         <h1>Dashboard beheren</h1>
-        <a class="management-back" href="{{ route('accounts.index') }}">Terug naar accountoverzicht</a>
+        <a class="management-back" href="{{ route('home') }}">Terug naar home</a>
+        @if (auth()->user()?->canViewAccountOverview())
+            <a class="management-back" href="{{ route('accounts.index') }}">Terug naar accountoverzicht</a>
+        @else
+            <a class="management-back" href="{{ route('home') }}">Terug naar home</a>
+        @endif
     </div>
 
     @include('partials.flash')
@@ -92,6 +97,12 @@
         <h2>Boekingen monitoren</h2>
         <p>Bekijk per datum hoeveel boekingen er zijn geplaatst, inclusief trend en status per bestemming.</p>
         <a class="management-btn" href="{{ route('management.bookings') }}">Aantal Boeking Bekijken</a>
+    </section>
+
+    <section class="management-card" style="margin-top: 1rem;">
+        <h2>Omzet bekijken</h2>
+        <p>Selecteer een periode en bekijk de omzet per bestemming en het totaalbedrag van de gekozen periode.</p>
+        <a class="management-btn" href="{{ route('management.revenue') }}">Omzet bekijken</a>
     </section>
 </div>
 </body>
