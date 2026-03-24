@@ -19,9 +19,20 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-Route::get('/accounts', [AccountController::class, 'index'])
-    ->middleware(['auth', 'can:view-account-overview'])
-    ->name('accounts.index');
+Route::middleware(['auth', 'can:view-account-overview'])
+    ->prefix('accounts')
+    ->name('accounts.')
+    ->group(function (): void {
+        Route::get('/', [AccountController::class, 'index'])->name('index');
+
+        Route::get('/nieuw', [AccountController::class, 'create'])
+            ->middleware('can:manage-dashboard')
+            ->name('create');
+
+        Route::post('/', [AccountController::class, 'store'])
+            ->middleware('can:manage-dashboard')
+            ->name('store');
+    });
 
 Route::middleware(['auth', 'can:manage-dashboard'])
     ->prefix('management')

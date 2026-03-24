@@ -83,7 +83,7 @@
 <div class="management-shell">
     <div class="management-head">
         <h1>Dashboard beheren</h1>
-        <a class="management-back" href="{{ route('accounts.index') }}">Terug naar accountoverzicht</a>
+        <a class="management-back" href="{{ route('accounts.index') }}">ga naar accountoverzicht</a>
     </div>
 
     @include('partials.flash')
