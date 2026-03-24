@@ -17,7 +17,7 @@
         .management-head {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             gap: 1rem;
             flex-wrap: wrap;
             margin-bottom: 1rem;
@@ -28,17 +28,6 @@
             font-family: 'Space Grotesk', sans-serif;
             color: #173f66;
             font-size: 1.7rem;
-        }
-
-        .management-back {
-            text-decoration: none;
-            color: #1f578a;
-            font-weight: 700;
-        }
-
-        .management-back:hover {
-            text-decoration: underline;
-            text-underline-offset: 2px;
         }
 
         .management-card {
@@ -77,13 +66,35 @@
         .management-btn:hover {
             filter: brightness(1.05);
         }
+
+        .management-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .management-btn-secondary {
+            border: 1px solid #b7d0ea;
+            color: #1f578a;
+            background: #f3f8ff;
+        }
+
+        @media (max-width: 640px) {
+            .management-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .management-actions .management-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="management-shell">
     <div class="management-head">
         <h1>Dashboard beheren</h1>
-        <a class="management-back" href="{{ route('accounts.index') }}">ga naar accountoverzicht</a>
     </div>
 
     @include('partials.flash')
@@ -91,7 +102,11 @@
     <section class="management-card">
         <h2>Boekingen monitoren</h2>
         <p>Bekijk per datum hoeveel boekingen er zijn geplaatst, inclusief trend en status per bestemming.</p>
-        <a class="management-btn" href="{{ route('management.bookings') }}">Aantal Boeking Bekijken</a>
+        <div class="management-actions">
+            <a class="management-btn" href="{{ route('management.bookings') }}">Aantal Boeking Bekijken</a>
+            <a class="management-btn management-btn-secondary" href="{{ route('accounts.index') }}">Ga naar accountoverzicht</a>
+            <a class="management-btn management-btn-secondary" href="{{ route('home') }}">Home</a>
+        </div>
     </section>
 </div>
 </body>
