@@ -6,5 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reis extends Model
 {
-    protected $fillable = ['titel', 'beschrijving', 'prijs'];
+    protected $table = 'reizen';
+
+    protected $fillable = [
+        'titel',
+        'land',
+        'beschrijving',
+        'prijs',
+        'afbeelding',
+        'soort_reis',
+        'promo'
+    ];
 }

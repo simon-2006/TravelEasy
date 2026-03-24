@@ -18,7 +18,11 @@ Route::middleware('guest')->group(function () {
 });
 
 
+
+
+
 Route::get('/reizen', [ReisController::class, 'index'])->name('reizen.index');
+Route::get('/reizen/{id}', [ReisController::class, 'show'])->name('reizen.show');
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')

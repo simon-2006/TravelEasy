@@ -11,7 +11,7 @@
 </head>
 <body>
 <header class="container topbar reveal">
-    <div class="logo-circle">TravelEasy</div>9
+    <div class="logo-circle">TravelEasy</div>
     <nav class="nav-links" aria-label="Navbar">
         <a href="{{ route('home') }}">Home</a>
         <a href="#">Bestemmingen</a>
@@ -28,6 +28,7 @@
             @endif
             @if (auth()->user()->canManageDashboard())
                 <a href="{{ route('management.index') }}">Dashboard beheren</a>
+
             @endif
             <a href="{{ route('klanten.index') }}">Klanten</a>
             <form class="nav-logout-form" action="{{ route('logout') }}" method="post">

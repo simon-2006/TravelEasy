@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Reis;
 
 class ReisController extends Controller
 {
     public function index()
     {
-        $reizen = Reis::all();
+        $reizen = Reis::orderBy('id', 'desc')->get();
         return view('reizen.index', compact('reizen'));
     }
 
@@ -22,5 +21,6 @@ class ReisController extends Controller
                 ->with('error', 'Reis niet gevonden');
         }
 
+        return view('reizen.show', compact('reis'));
     }
 }
