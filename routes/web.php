@@ -5,6 +5,8 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagementDashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ReisController;
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -14,6 +16,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.store');
 });
+
+
+Route::get('/reizen', [ReisController::class, 'index'])->name('reizen.index');
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
