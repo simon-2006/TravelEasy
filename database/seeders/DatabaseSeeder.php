@@ -17,22 +17,22 @@ class DatabaseSeeder extends Seeder
     {
         User::query()->updateOrCreate(
             ['email' => 'admin@traveleasy.nl'],
-            ['name' => 'admin', 'role' => User::ROLE_ADMINISTRATOR, 'password' => 'password']
+            ['name' => 'admin', 'role' => User::ROLE_ADMINISTRATOR, 'password' => bcrypt('password')]
         );
 
         User::query()->updateOrCreate(
             ['email' => 'manager@traveleasy.nl'],
-            ['name' => 'manager', 'role' => User::ROLE_MANAGER, 'password' => 'password']
+            ['name' => 'manager', 'role' => User::ROLE_MANAGER, 'password' => bcrypt('password')]
         );
 
         User::query()->updateOrCreate(
             ['email' => 'reisadviseur@traveleasy.nl'],
-            ['name' => 'reisadviseur', 'role' => User::ROLE_REISADVISEUR, 'password' => 'password']
+            ['name' => 'reisadviseur', 'role' => User::ROLE_REISADVISEUR, 'password' => bcrypt('password')]
         );
 
         User::query()->updateOrCreate(
             ['email' => 'financieel@traveleasy.nl'],
-            ['name' => 'financieel', 'role' => User::ROLE_FINANCIEEL_MEDEWERKER, 'password' => 'password']
+            ['name' => 'financieel', 'role' => User::ROLE_FINANCIEEL_MEDEWERKER, 'password' => bcrypt('password')]
         );
 
         $this->call(BookingSeeder::class);
