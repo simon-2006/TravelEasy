@@ -32,3 +32,14 @@ Route::middleware(['auth', 'can:manage-dashboard'])
         Route::get('/boekingen', [ManagementDashboardController::class, 'bookings'])
             ->name('bookings');
     });
+
+use App\Http\Controllers\KlantController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/klanten/create', [KlantController::class, 'create']);
+    Route::get('/klanten', [KlantController::class, 'index'])->name('klanten.index');
+    // Route::get('/klanten/{id}/edit', [KlantController::class, 'edit']);
+    Route::put('/klanten/{id}', [KlantController::class, 'update']);
+    Route::delete('/klanten/{id}', [KlantController::class, 'destroy']);
+    Route::post('/klanten', [KlantController::class, 'store']);
+});
