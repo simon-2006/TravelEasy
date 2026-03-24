@@ -129,6 +129,16 @@
     <div class="container">
         <h1>Overzicht van reizen</h1>
 
+        @if(session('success'))
+            <p style="color: green; margin-bottom: 20px;">{{ session('success') }}</p>
+        @endif
+
+        <div style="margin-bottom: 20px;">
+            <a href="{{ route('reizen.create') }}" style="display:inline-block; background:#0d2238; color:white; text-decoration:none; padding:12px 18px; border-radius:8px;">
+                Reis toevoegen
+            </a>
+        </div>
+
         @if(session('error'))
             <p class="foutmelding">{{ session('error') }}</p>
         @endif

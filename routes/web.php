@@ -20,8 +20,9 @@ Route::middleware('guest')->group(function () {
 
 
 
-
 Route::get('/reizen', [ReisController::class, 'index'])->name('reizen.index');
+Route::get('/reizen/toevoegen', [ReisController::class, 'create'])->name('reizen.create');
+Route::post('/reizen', [ReisController::class, 'store'])->name('reizen.store');
 Route::get('/reizen/{id}', [ReisController::class, 'show'])->name('reizen.show');
 
 Route::post('/logout', [AuthController::class, 'logout'])
