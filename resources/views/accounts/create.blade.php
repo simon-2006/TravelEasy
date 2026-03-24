@@ -10,7 +10,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}?v={{ filemtime(public_path('css/welcome.css')) }}">
     <style>
         .account-create-shell {
             width: min(100% - 2rem, 1180px);
@@ -23,16 +23,39 @@
             background: #f8fbff;
             padding: 0.75rem 1rem;
             display: grid;
-            grid-template-columns: auto 1fr auto;
+            grid-template-columns: auto 1fr;
             gap: 0.9rem;
             align-items: center;
         }
 
-        .account-create-nav {
-            text-align: center;
-            font-family: 'Space Grotesk', sans-serif;
+        .account-top-actions {
+            margin-left: auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            gap: 0.55rem;
+            align-items: center;
+        }
+
+        .home-btn {
+            text-decoration: none;
+            border: 1px solid #275782;
+            border-radius: 10px;
+            padding: 0.55rem 0.9rem;
+            color: #17456d;
+            background: #ffffff;
             font-weight: 700;
-            color: #173f66;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            z-index: 3;
+        }
+
+        .home-btn:hover {
+            background: #edf5ff;
         }
 
         .account-overview-btn {
@@ -44,6 +67,12 @@
             background: #ffffff;
             font-weight: 700;
             white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            z-index: 3;
         }
 
         .account-overview-btn:hover {
@@ -155,12 +184,12 @@
 
         @media (max-width: 760px) {
             .account-create-topbar {
-                grid-template-columns: auto 1fr;
+                grid-template-columns: 1fr;
             }
 
-            .account-create-nav {
-                grid-column: 1 / -1;
-                order: 3;
+            .account-top-actions {
+                margin-left: 0;
+                justify-content: flex-start;
             }
 
             .account-create-main {
@@ -174,8 +203,10 @@
     <div class="account-create-shell">
         <header class="account-create-topbar">
             <div class="logo-circle">TravelEasy</div>
-            <a class="home-btn" href="{{ route('home') }}">Home</a>
-            <a class="account-overview-btn" href="{{ route('accounts.index') }}">Terug naar Account Overzicht</a>
+            <div class="account-top-actions">
+                <a class="home-btn" href="{{ route('home') }}">Home</a>
+                <a class="account-overview-btn" href="{{ route('accounts.index') }}">Terug naar Account Overzicht</a>
+            </div>
         </header>
 
         <main class="account-create-main">
