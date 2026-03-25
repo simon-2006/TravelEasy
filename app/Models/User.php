@@ -66,6 +66,10 @@ class User extends Authenticatable
 
     public function canManageDashboard(): bool
     {
-        return $this->role === self::ROLE_ADMINISTRATOR;
+        return in_array(
+            $this->role,
+            [self::ROLE_ADMINISTRATOR, self::ROLE_MANAGER, self::ROLE_FINANCIEEL_MEDEWERKER],
+            true
+        );
     }
 }

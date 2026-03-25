@@ -127,7 +127,11 @@
         <h1>Aantal Boeking Bekijken</h1>
         <div class="bookings-actions">
             <a class="bookings-link" href="{{ route('management.index') }}">Dashboard beheren</a>
-            <a class="bookings-link" href="{{ route('accounts.index') }}">Accountoverzicht</a>
+            @if (auth()->user()?->canViewAccountOverview())
+                <a class="bookings-link" href="{{ route('accounts.index') }}">Accountoverzicht</a>
+            @else
+                <a class="bookings-link" href="{{ route('home') }}">Home</a>
+            @endif
         </div>
     </div>
 
