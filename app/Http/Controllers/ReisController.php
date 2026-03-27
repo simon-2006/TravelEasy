@@ -31,7 +31,7 @@ class ReisController extends Controller
         ]);
 
         try {
-             //throw new \Exception('Database fout');
+             throw new \Exception('Database fout');
 
             Reis::create([
                 'titel' => $request->titel,
