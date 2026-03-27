@@ -29,6 +29,10 @@ Route::get('/reizen/toevoegen', [ReisController::class, 'create'])->name('reizen
 Route::post('/reizen', [ReisController::class, 'store'])->name('reizen.store');
 Route::get('/reizen/{id}', [ReisController::class, 'show'])->name('reizen.show');
 
+Route::get('/accommodaties', [AccommodatieController::class, 'index'])->name('accommodaties.index');
+Route::get('/accommodaties/toevoegen', [AccommodatieController::class, 'create'])->name('accommodaties.create');
+Route::post('/accommodaties', [AccommodatieController::class, 'store'])->name('accommodaties.store');
+
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');

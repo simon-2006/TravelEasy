@@ -13,29 +13,29 @@ class BookingSeeder extends Seeder
         $now = now();
 
         $reizen = [
-            ['naam' => 'Stedentrip Amsterdam', 'bestemming' => 'Nederland', 'prijs' => 499.00],
-            ['naam' => 'Vlucht Barcelona', 'bestemming' => 'Spanje', 'prijs' => 849.00],
-            ['naam' => 'Roadtrip Berlijn', 'bestemming' => 'Duitsland', 'prijs' => 589.00],
-            ['naam' => 'Citybreak Rome', 'bestemming' => 'Italie', 'prijs' => 719.00],
-            ['naam' => 'Nijl Cruise', 'bestemming' => 'Egypte', 'prijs' => 1099.00],
-            ['naam' => 'Beach Aruba', 'bestemming' => 'Aruba', 'prijs' => 1299.00],
-            ['naam' => 'Tokyo Explorer', 'bestemming' => 'Japan', 'prijs' => 1599.00],
-            ['naam' => 'Rio Experience', 'bestemming' => 'Brazilie', 'prijs' => 1399.00],
-            ['naam' => 'Lissabon Weekend', 'bestemming' => 'Portugal', 'prijs' => 669.00],
-            ['naam' => 'Marrakesh Tour', 'bestemming' => 'Marokko', 'prijs' => 779.00],
+            ['titel' => 'Stedentrip Amsterdam', 'land' => 'Nederland', 'prijs' => 499.00],
+            ['titel' => 'Vlucht Barcelona', 'land' => 'Spanje', 'prijs' => 849.00],
+            ['titel' => 'Roadtrip Berlijn', 'land' => 'Duitsland', 'prijs' => 589.00],
+            ['titel' => 'Citybreak Rome', 'land' => 'Italie', 'prijs' => 719.00],
+            ['titel' => 'Nijl Cruise', 'land' => 'Egypte', 'prijs' => 1099.00],
+            ['titel' => 'Beach Aruba', 'land' => 'Aruba', 'prijs' => 1299.00],
+            ['titel' => 'Tokyo Explorer', 'land' => 'Japan', 'prijs' => 1599.00],
+            ['titel' => 'Rio Experience', 'land' => 'Brazilie', 'prijs' => 1399.00],
+            ['titel' => 'Lissabon Weekend', 'land' => 'Portugal', 'prijs' => 669.00],
+            ['titel' => 'Marrakesh Tour', 'land' => 'Marokko', 'prijs' => 779.00],
         ];
 
         foreach ($reizen as $index => $reis) {
-            $startdatum = $now->copy()->addDays(7 + ($index * 2))->toDateString();
-            $einddatum = $now->copy()->addDays(10 + ($index * 2))->toDateString();
-
             DB::table('reizen')->updateOrInsert(
-                ['naam' => $reis['naam']],
+                ['titel' => $reis['titel']],
                 [
-                    'bestemming' => $reis['bestemming'],
-                    'startdatum' => $startdatum,
-                    'einddatum' => $einddatum,
+                    'titel' => $reis['titel'],
+                    'land' => $reis['land'],
+                    'beschrijving' => 'Beschrijving voor ' . $reis['titel'],
                     'prijs' => $reis['prijs'],
+                    'afbeelding' => null,
+                    'soort_reis' => 'Retour',
+                    'promo' => false,
                     'updated_at' => $now,
                     'created_at' => $now,
                 ]
@@ -43,8 +43,8 @@ class BookingSeeder extends Seeder
         }
 
         $reisIdsByName = DB::table('reizen')
-            ->whereIn('naam', collect($reizen)->pluck('naam'))
-            ->pluck('Id', 'naam');
+            ->whereIn('titel', collect($reizen)->pluck('titel'))
+            ->pluck('id', 'titel');
 
         if ($reisIdsByName->count() < count($reizen)) {
             return;
