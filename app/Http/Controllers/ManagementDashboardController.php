@@ -6,6 +6,7 @@ use App\Http\Requests\ViewRevenueRequest;
 use App\Models\Boeking;
 use App\Models\Omzet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ManagementDashboardController extends Controller

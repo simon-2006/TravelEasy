@@ -22,6 +22,10 @@
         <a href="#">Bestemmingen</a>
         <a href="{{ route('reizen.index') }}">Reizen</a>
         <a href="#">Contact</a>
+        <a href="{{ route('transport.index') }}">Transport</a>
+        <a href="{{ route('accommodaties.index') }}">Accommodaties</a>
+        <a href="{{ route('facturen.index') }}">Facturen</a>
+        
         @guest
             <a href="{{ route('login') }}">Login</a>
             <a href="{{ route('register') }}">Registreren</a>

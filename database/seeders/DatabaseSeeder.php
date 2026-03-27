@@ -36,5 +36,7 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->call(BookingSeeder::class);
+        $this->call(AccommodatieSeeder::class);
+        $this->call(FactuurSeeder::class);
     }
 }

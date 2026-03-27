@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\FactuurController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagementDashboardController;
+use App\Http\Controllers\AccommodatieController;
+use App\Http\Controllers\TransportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReisController;
 use App\Http\Controllers\KlantController;
