@@ -189,6 +189,9 @@
         <h1>Accountoverzicht</h1>
         <div class="accounts-actions">
             @if (auth()->user()?->canManageDashboard())
+                <a class="accounts-manage" href="{{ route('accounts.create') }}">Nieuw Account Toevoegen</a>
+            @endif
+            @if (auth()->user()?->canManageDashboard())
                 <a class="accounts-manage" href="{{ route('management.index') }}">Dashboard beheren</a>
             @endif
             <a class="accounts-back" href="{{ route('home') }}">Terug naar home</a>
