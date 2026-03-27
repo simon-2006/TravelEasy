@@ -6,6 +6,7 @@ use App\Models\Transport;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class TransportController extends Controller
 {
@@ -39,7 +40,7 @@ class TransportController extends Controller
             return redirect()->route('transport.index')
                              ->with('status_success', 'Transport is succesvol toegevoegd.');
         } catch (QueryException $e) {
-            \Log::error('Fout bij het aanmaken van transport: ' . $e->getMessage());
+            Log::error('Fout bij het aanmaken van transport: ' . $e->getMessage());
             return redirect()->back()
                              ->withInput()
                              ->with('status_error', 'Er is een fout opgetreden bij het opslaan van het transport. Probeer het opnieuw.');
