@@ -18,13 +18,18 @@
     <nav class="nav-links" aria-label="Navbar">
         <a href="{{ route('home') }}">Home</a>
         <a href="#">Bestemmingen</a>
-        <a href="#">Vlucht Deals</a>
+        <a href="{{ route('reizen.index') }}">Reizen</a>
         <a href="#">Contact</a>
         @auth
-            <span class="nav-user">Hallo</span>
-            <a href="{{ route('accounts.index') }}">Accountoverzicht</a>
-            <a href="{{ route('management.index') }}">Dashboard beheren</a>
-            <a href="{{ route('klanten.index') }}" class="active">Klanten</a>
+            <span class="nav-user">Hallo, {{ auth()->user()->name }} ({{ auth()->user()->role }})</span>
+            @if (auth()->user()->canViewAccountOverview())
+                <a href="{{ route('accounts.index') }}">Accountoverzicht</a>
+            @endif
+            @if (auth()->user()->canManageDashboard())
+                <a href="{{ route('management.index') }}">Dashboard beheren</a>
+
+            @endif
+            <a href="{{ route('klanten.index') }}">Klanten</a>
             <form class="nav-logout-form" action="{{ route('logout') }}" method="post">
                 @csrf
                 <button class="nav-logout-btn" type="submit">Logout</button>
@@ -35,6 +40,12 @@
             <a href="{{ route('register') }}">Registreren</a>
         @endguest
     </nav>
+
+
+
+    </nav>
+
+
 </header>
 <div class="container flash-stack reveal delay-1">
     @include('partials.flash')

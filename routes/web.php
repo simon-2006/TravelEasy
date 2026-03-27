@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ManagementDashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ReisController;
+use App\Http\Controllers\KlantController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -56,7 +57,6 @@ Route::middleware(['auth', 'can:manage-dashboard'])
             ->name('revenue');
     });
 
-use App\Http\Controllers\KlantController;
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/klanten/create', [KlantController::class, 'create']);
