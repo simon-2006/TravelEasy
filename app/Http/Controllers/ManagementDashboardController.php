@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Boeking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ManagementDashboardController extends Controller
@@ -28,5 +29,11 @@ class ManagementDashboardController extends Controller
             'bookings' => $bookings,
             'totalBookings' => $totalBookings,
         ]);
+    }
+
+    public function facturen(): View
+    {
+        $facturen = DB::table('facturen')->get();
+        return view('management.facturen', compact('facturen'));
     }
 }
