@@ -185,13 +185,22 @@
 </head>
 <body>
 <div class="accounts-shell">
+    @php
+        $canManageAccounts = auth()->user()?->canManageDashboard();
+        $showCreateForm = $canManageAccounts && ($errors->any() || request()->boolean('show_create'));
+    @endphp
+
     <div class="accounts-head">
         <h1>Accountoverzicht</h1>
         <div class="accounts-actions">
-            @if (auth()->user()?->canManageDashboard())
-                <a class="accounts-manage" href="{{ route('accounts.create') }}">Nieuw Account Toevoegen</a>
+            @if ($canManageAccounts)
+                @if ($showCreateForm)
+                    <a class="accounts-manage" href="{{ route('accounts.index') }}">Formulier sluiten</a>
+                @else
+                    <a class="accounts-manage" href="{{ route('accounts.create') }}">Nieuw Account Toevoegen</a>
+                @endif
             @endif
-            @if (auth()->user()?->canManageDashboard())
+            @if ($canManageAccounts)
                 <a class="accounts-manage" href="{{ route('management.index') }}">Dashboard beheren</a>
             @endif
             <a class="accounts-back" href="{{ route('home') }}">Terug naar home</a>
@@ -200,7 +209,7 @@
 
     @include('partials.flash')
 
-    @if (auth()->user()?->canManageDashboard())
+    @if ($showCreateForm)
         <section class="accounts-create-card">
             <h2>Nieuw account toevoegen</h2>
             <p>Vul de gegevens in en sla het account op met gekoppeld medewerker-profiel.</p>

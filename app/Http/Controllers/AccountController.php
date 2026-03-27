@@ -13,6 +13,13 @@ use Throwable;
 
 class AccountController extends Controller
 {
+    public function create(): RedirectResponse
+    {
+        return redirect()->route('accounts.index', [
+            'show_create' => 1,
+        ]);
+    }
+
     public function index(): View
     {
         $users = Account::overzichtLijst();

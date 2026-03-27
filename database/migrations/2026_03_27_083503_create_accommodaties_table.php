@@ -11,6 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Deze migratie was dubbel aanwezig in het project.
+        // Als de tabel al bestaat, slaan we deze stap bewust over.
+        if (Schema::hasTable('accommodaties')) {
+            return;
+        }
+
         Schema::create('accommodaties', function (Blueprint $table) {
             $table->id('Id');
             $table->string('naam');
@@ -26,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accommodaties');
+        // Geen drop hier: de "echte" create-migratie is 2026_03_24_084844.
     }
 };

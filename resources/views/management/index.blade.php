@@ -104,6 +104,7 @@
         <p>Bekijk per datum hoeveel boekingen er zijn geplaatst, inclusief trend en status per bestemming.</p>
         <div class="management-actions">
             <a class="management-btn" href="{{ route('management.bookings') }}">Aantal Boeking Bekijken</a>
+            <a class="management-btn" href="{{ route('management.revenue') }}">Omzet bekijken</a>
             <a class="management-btn management-btn-secondary" href="{{ route('accounts.index') }}">Ga naar accountoverzicht</a>
             <a class="management-btn management-btn-secondary" href="{{ route('home') }}">Home</a>
         </div>
