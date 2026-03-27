@@ -103,6 +103,12 @@
     </style>
 </head>
 <body>
+    
+    @if(session('error'))
+    <div class="database-fout">
+        {{ session('error') }}
+    </div>
+@endif
     <div class="container">
         <div class="kaart">
             <h1>Reis toevoegen</h1>
