@@ -258,3 +258,85 @@ test('administrator ziet boekingen in het managementoverzicht', function () {
         ->assertSeeText('Nederland')
         ->assertSeeText('Totaal boekingen: 2');
 });
+
+test('administrator kan facturen overzicht openen', function () {
+    $admin = User::factory()->create([
+        'role' => User::ROLE_ADMINISTRATOR,
+    ]);
+
+    $response = $this
+        ->actingAs($admin)
+        ->get('/management/facturen');
+
+    $response
+        ->assertOk()
+        ->assertSeeText('Facturenoverzicht');
+});
+
+test('administrator kan accommodaties overzicht openen', function () {
+    $admin = User::factory()->create([
+        'role' => User::ROLE_ADMINISTRATOR,
+    ]);
+
+    $response = $this
+        ->actingAs($admin)
+        ->get('/accommodaties');
+
+    $response
+        ->assertOk()
+        ->assertSeeText('Accommodaties');
+});
+
+test('administrator kan transport overzicht openen', function () {
+    $admin = User::factory()->create([
+        'role' => User::ROLE_ADMINISTRATOR,
+    ]);
+
+    $response = $this
+        ->actingAs($admin)
+        ->get('/transport');
+
+    $response
+        ->assertOk()
+        ->assertSeeText('Transport Overzicht');
+});
+
+test('reisadviseur mag facturen overzicht niet openen', function () {
+    $advisor = User::factory()->create([
+        'role' => User::ROLE_REISADVISEUR,
+    ]);
+
+    $response = $this
+        ->actingAs($advisor)
+        ->get('/management/facturen');
+
+    $response->assertForbidden();
+});
+
+test('reisadviseur kan accommodaties overzicht openen', function () {
+    $advisor = User::factory()->create([
+        'role' => User::ROLE_REISADVISEUR,
+    ]);
+
+    $response = $this
+        ->actingAs($advisor)
+        ->get('/accommodaties');
+
+    $response
+        ->assertOk()
+        ->assertSeeText('Accommodaties');
+});
+
+test('reisadviseur kan transport overzicht openen', function () {
+    $advisor = User::factory()->create([
+        'role' => User::ROLE_REISADVISEUR,
+    ]);
+
+    $response = $this
+        ->actingAs($advisor)
+        ->get('/transport');
+
+    $response
+        ->assertOk()
+        ->assertSeeText('Transport Overzicht');
+});
