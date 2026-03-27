@@ -7,15 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}?v={{ filemtime(public_path('css/welcome.css')) }}">
 </head>
 <body>
 <header class="container topbar reveal">
     <div class="logo-circle">TravelEasy</div>
-    <nav class="nav-links" aria-label="Navbar">
+    <button class="nav-toggle" type="button" aria-label="Open navigatie" aria-controls="primary-nav" aria-expanded="false" data-nav-toggle>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+        <span class="nav-toggle-bar"></span>
+    </button>
+    <nav id="primary-nav" class="nav-links" aria-label="Navbar" data-nav-links hidden>
         <a href="{{ route('home') }}">Home</a>
         <a href="#">Bestemmingen</a>
-        <a href="#">Vlucht Deals</a>
+        <a href="{{ route('reizen.index') }}">Reizen</a>
         <a href="#">Contact</a>
         <a href="{{ route('transport.index') }}">Transport</a>
         <a href="{{ route('accommodaties.index') }}">Accommodaties</a>
@@ -32,7 +37,9 @@
             @endif
             @if (auth()->user()->canManageDashboard())
                 <a href="{{ route('management.index') }}">Dashboard beheren</a>
+
             @endif
+            <a href="{{ route('klanten.index') }}">Klanten</a>
             <form class="nav-logout-form" action="{{ route('logout') }}" method="post">
                 @csrf
                 <button class="nav-logout-btn" type="submit">Logout</button>
@@ -188,5 +195,64 @@
         </div>
     </div>
 </footer>
+<script>
+    (function () {
+        var BREAKPOINT = 1280;
+        var toggle = document.querySelector('[data-nav-toggle]');
+        var nav = document.querySelector('[data-nav-links]');
+
+        if (!toggle || !nav) {
+            return;
+        }
+
+        function isMobile() {
+            return window.matchMedia('(max-width: ' + BREAKPOINT + 'px)').matches;
+        }
+
+        function setOpenState(open) {
+            nav.classList.toggle('is-open', open);
+            nav.hidden = isMobile() ? !open : false;
+
+            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+            toggle.setAttribute('aria-label', open ? 'Sluit navigatie' : 'Open navigatie');
+        }
+
+        function syncWithViewport() {
+            var mobile = isMobile();
+
+            toggle.hidden = !mobile;
+
+            if (!mobile) {
+                setOpenState(false);
+                nav.hidden = false;
+            } else if (!nav.classList.contains('is-open')) {
+                nav.hidden = true;
+            }
+        }
+
+        toggle.addEventListener('click', function () {
+            setOpenState(!nav.classList.contains('is-open'));
+        });
+
+        nav.addEventListener('click', function (event) {
+            if (!isMobile()) {
+                return;
+            }
+
+            var target = event.target;
+
+            if (!(target instanceof HTMLElement)) {
+                return;
+            }
+
+            if (target.closest('a, button')) {
+                setOpenState(false);
+            }
+        });
+
+        window.addEventListener('resize', syncWithViewport);
+        syncWithViewport();
+    })();
+</script>
 </body>
 </html>

@@ -7,17 +7,15 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up(): void
-    {
-        Schema::create('reizen', function (Blueprint $table): void {
-            $table->increments('Id');
-            $table->string('naam', 100);
-            $table->string('bestemming', 100)->nullable();
-            $table->date('startdatum')->nullable();
-            $table->date('einddatum')->nullable();
-            $table->decimal('prijs', 10, 2)->nullable();
-            $table->timestamps();
-        });
-    }
+{
+    Schema::create('reizen', function (Blueprint $table) {
+        $table->id();
+        $table->string('titel');
+        $table->text('beschrijving');
+        $table->decimal('prijs', 8, 2);
+        $table->timestamps();
+    });
+}
 
     public function down(): void
     {

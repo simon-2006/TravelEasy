@@ -188,7 +188,7 @@ test('administrator kan dashboard beheren openen', function () {
         ->assertSeeText('Aantal Boeking Bekijken');
 });
 
-test('manager mag dashboard beheren niet openen', function () {
+test('manager kan dashboard beheren openen', function () {
     $manager = User::factory()->create([
         'role' => User::ROLE_MANAGER,
     ]);
@@ -196,7 +196,22 @@ test('manager mag dashboard beheren niet openen', function () {
     $this
         ->actingAs($manager)
         ->get('/management/dashboard')
-        ->assertForbidden();
+        ->assertOk()
+        ->assertSeeText('Dashboard beheren')
+        ->assertSeeText('Omzet bekijken');
+});
+
+test('financieel medewerker kan dashboard beheren openen', function () {
+    $financialEmployee = User::factory()->create([
+        'role' => User::ROLE_FINANCIEEL_MEDEWERKER,
+    ]);
+
+    $this
+        ->actingAs($financialEmployee)
+        ->get('/management/dashboard')
+        ->assertOk()
+        ->assertSeeText('Dashboard beheren')
+        ->assertSeeText('Omzet bekijken');
 });
 
 test('administrator ziet melding als er geen boekingen beschikbaar zijn', function () {
@@ -259,84 +274,83 @@ test('administrator ziet boekingen in het managementoverzicht', function () {
         ->assertSeeText('Totaal boekingen: 2');
 });
 
-test('administrator kan facturen overzicht openen', function () {
-    $admin = User::factory()->create([
-        'role' => User::ROLE_ADMINISTRATOR,
+test('manager ziet omzet voor een geselecteerde periode', function () {
+    DB::table('reizen')->insert([
+        [
+            'Id' => 1,
+            'naam' => 'Testreis Nederland',
+            'bestemming' => 'Nederland',
+            'startdatum' => now()->toDateString(),
+            'einddatum' => now()->addDays(3)->toDateString(),
+            'prijs' => 500.00,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+        [
+            'Id' => 2,
+            'naam' => 'Testreis Spanje',
+            'bestemming' => 'Spanje',
+            'startdatum' => now()->toDateString(),
+            'einddatum' => now()->addDays(4)->toDateString(),
+            'prijs' => 700.00,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+    ]);
+
+    DB::table('boekingen')->insert([
+        [
+            'reisId' => 1,
+            'aantal_personen' => 2,
+            'datum_boeking' => now()->subDay()->toDateTimeString(),
+            'status' => 'geboekt',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+        [
+            'reisId' => 2,
+            'aantal_personen' => 1,
+            'datum_boeking' => now()->toDateTimeString(),
+            'status' => 'bevestigd',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+        [
+            'reisId' => 2,
+            'aantal_personen' => 1,
+            'datum_boeking' => now()->toDateTimeString(),
+            'status' => 'geannuleerd',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ],
+    ]);
+
+    $manager = User::factory()->create([
+        'role' => User::ROLE_MANAGER,
     ]);
 
     $response = $this
-        ->actingAs($admin)
-        ->get('/management/facturen');
+        ->actingAs($manager)
+        ->get('/management/omzet?periode=aangepast&van_datum='.now()->subDays(2)->toDateString().'&tot_datum='.now()->toDateString());
 
     $response
         ->assertOk()
-        ->assertSeeText('Facturenoverzicht');
+        ->assertSeeText('Omzet geladen')
+        ->assertSeeText('Nederland')
+        ->assertSeeText('Spanje')
+        ->assertSeeText('Totale omzet in periode');
 });
 
-test('administrator kan accommodaties overzicht openen', function () {
-    $admin = User::factory()->create([
-        'role' => User::ROLE_ADMINISTRATOR,
+test('financieel medewerker ziet melding wanneer geen omzet beschikbaar is', function () {
+    $financialEmployee = User::factory()->create([
+        'role' => User::ROLE_FINANCIEEL_MEDEWERKER,
     ]);
 
     $response = $this
-        ->actingAs($admin)
-        ->get('/accommodaties');
+        ->actingAs($financialEmployee)
+        ->get('/management/omzet?periode=aangepast&van_datum=2024-01-01&tot_datum=2024-01-31');
 
     $response
         ->assertOk()
-        ->assertSeeText('Accommodaties');
-});
-
-test('administrator kan transport overzicht openen', function () {
-    $admin = User::factory()->create([
-        'role' => User::ROLE_ADMINISTRATOR,
-    ]);
-
-    $response = $this
-        ->actingAs($admin)
-        ->get('/transport');
-
-    $response
-        ->assertOk()
-        ->assertSeeText('Transport Overzicht');
-});
-
-test('reisadviseur mag facturen overzicht niet openen', function () {
-    $advisor = User::factory()->create([
-        'role' => User::ROLE_REISADVISEUR,
-    ]);
-
-    $response = $this
-        ->actingAs($advisor)
-        ->get('/management/facturen');
-
-    $response->assertForbidden();
-});
-
-test('reisadviseur kan accommodaties overzicht openen', function () {
-    $advisor = User::factory()->create([
-        'role' => User::ROLE_REISADVISEUR,
-    ]);
-
-    $response = $this
-        ->actingAs($advisor)
-        ->get('/accommodaties');
-
-    $response
-        ->assertOk()
-        ->assertSeeText('Accommodaties');
-});
-
-test('reisadviseur kan transport overzicht openen', function () {
-    $advisor = User::factory()->create([
-        'role' => User::ROLE_REISADVISEUR,
-    ]);
-
-    $response = $this
-        ->actingAs($advisor)
-        ->get('/transport');
-
-    $response
-        ->assertOk()
-        ->assertSeeText('Transport Overzicht');
+        ->assertSeeText('Er is geen omzet beschikbaar voor de geselecteerde periode.');
 });

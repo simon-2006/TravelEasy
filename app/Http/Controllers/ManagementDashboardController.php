@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ViewRevenueRequest;
 use App\Models\Boeking;
+use App\Models\Omzet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -31,9 +33,30 @@ class ManagementDashboardController extends Controller
         ]);
     }
 
-    public function facturen(): View
+    public function revenue(ViewRevenueRequest $request): View
     {
-        $facturen = DB::table('facturen')->get();
-        return view('management.facturen', compact('facturen'));
+        $period = $request->periodRange();
+        $revenues = Omzet::overzichtVoorPeriode($period['from'], $period['to']);
+        $totalRevenue = Omzet::totaalVoorOverzicht($revenues);
+
+        if ($request->hasSubmittedFilter()) {
+            if ($revenues->isEmpty()) {
+                $request->session()->flash('status_error', 'Er is geen omzet beschikbaar voor de geselecteerde periode.');
+            } else {
+                $request->session()->flash(
+                    'status_success',
+                    "Omzet geladen voor {$period['label']} ({$period['from']->format('d-m-Y')} t/m {$period['to']->format('d-m-Y')})."
+                );
+            }
+        }
+
+        return view('management.revenue', [
+            'revenues' => $revenues,
+            'totalRevenue' => $totalRevenue,
+            'selectedPeriod' => $period['periode'],
+            'periodLabel' => $period['label'],
+            'startDate' => $period['from']->toDateString(),
+            'endDate' => $period['to']->toDateString(),
+        ]);
     }
 }
