@@ -30,18 +30,26 @@ class ReisController extends Controller
             'afbeelding' => 'nullable|string|max:255',
         ]);
 
-        Reis::create([
-            'titel' => $request->titel,
-            'land' => $request->land,
-            'beschrijving' => $request->beschrijving,
-            'prijs' => $request->prijs,
-            'soort_reis' => $request->soort_reis,
-            'promo' => $request->has('promo'),
-            'afbeelding' => $request->afbeelding,
-        ]);
+        try {
+             //throw new \Exception('Database fout');
 
-        return redirect()->route('reizen.index')
-            ->with('success', 'Reis succesvol toegevoegd.');
+            Reis::create([
+                'titel' => $request->titel,
+                'land' => $request->land,
+                'beschrijving' => $request->beschrijving,
+                'prijs' => $request->prijs,
+                'soort_reis' => $request->soort_reis,
+                'promo' => $request->has('promo'),
+                'afbeelding' => $request->afbeelding,
+            ]);
+
+            return redirect()->route('reizen.index')
+                ->with('success', 'Reis succesvol toegevoegd.');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'De reis kon niet worden opgeslagen door een databasefout.');
+        }
     }
 
     public function show($id)
