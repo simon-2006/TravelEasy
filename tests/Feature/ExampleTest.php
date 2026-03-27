@@ -138,6 +138,59 @@ test('manager kan accountoverzicht zien', function () {
         ->assertSeeText('Accountoverzicht');
 });
 
+test('administrator kan een nieuw account toevoegen met gekoppeld medewerker-profiel', function () {
+    $admin = User::factory()->create([
+        'role' => User::ROLE_ADMINISTRATOR,
+    ]);
+
+    $response = $this
+        ->actingAs($admin)
+        ->post('/accounts', [
+            'name' => 'nieuwe.manager',
+            'email' => 'nieuwe.manager@example.com',
+            'role' => User::ROLE_MANAGER,
+            'functie' => 'Teamlead Reizen',
+            'telefoon' => '0612345678',
+            'password' => 'Welkom123!',
+            'password_confirmation' => 'Welkom123!',
+        ]);
+
+    $response
+        ->assertRedirect('/accounts')
+        ->assertSessionHas('status_success');
+
+    $createdUser = User::query()->where('email', 'nieuwe.manager@example.com')->first();
+
+    expect($createdUser)->not->toBeNull();
+
+    $this->assertDatabaseHas('medewerkers', [
+        'user_id' => $createdUser->id,
+        'functie' => 'Teamlead Reizen',
+    ]);
+});
+
+test('manager mag geen nieuw account toevoegen', function () {
+    $manager = User::factory()->create([
+        'role' => User::ROLE_MANAGER,
+    ]);
+
+    $this
+        ->actingAs($manager)
+        ->post('/accounts', [
+            'name' => 'verboden.gebruiker',
+            'email' => 'verboden@example.com',
+            'role' => User::ROLE_REISADVISEUR,
+            'functie' => 'Reisadviseur',
+            'password' => 'Welkom123!',
+            'password_confirmation' => 'Welkom123!',
+        ])
+        ->assertForbidden();
+
+    $this->assertDatabaseMissing('users', [
+        'email' => 'verboden@example.com',
+    ]);
+});
+
 test('reisadviseur kan accountoverzicht niet zien', function () {
     $advisor = User::factory()->create([
         'role' => User::ROLE_REISADVISEUR,

@@ -62,6 +62,76 @@
             filter: brightness(1.05);
         }
 
+        .accounts-create-card {
+            border: 1px solid #d3e2f3;
+            border-radius: 14px;
+            background: #ffffff;
+            padding: 1.1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 18px 35px rgba(9, 42, 77, 0.1);
+        }
+
+        .accounts-create-card h2 {
+            margin: 0;
+            color: #173f66;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .accounts-create-card p {
+            margin: 0.4rem 0 0.85rem;
+            color: #3f5d79;
+        }
+
+        .accounts-form {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .accounts-form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.75rem;
+        }
+
+        .accounts-form label {
+            display: grid;
+            gap: 0.32rem;
+            color: #2f506f;
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+
+        .accounts-form input,
+        .accounts-form select {
+            border: 1px solid #c7dced;
+            border-radius: 10px;
+            padding: 0.68rem 0.72rem;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .accounts-form input:focus,
+        .accounts-form select:focus {
+            border-color: #4d8ecf;
+            box-shadow: 0 0 0 3px rgba(77, 142, 207, 0.18);
+        }
+
+        .accounts-form button {
+            justify-self: start;
+            border-radius: 999px;
+            border: 0;
+            padding: 0.7rem 1rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: linear-gradient(160deg, #0f67d8, #0b4da7);
+            cursor: pointer;
+        }
+
+        .accounts-form button:hover {
+            filter: brightness(1.05);
+        }
+
         .accounts-table-wrap {
             border: 1px solid #d3e2f3;
             border-radius: 14px;
@@ -105,6 +175,12 @@
             color: #1c4f7c;
             background: #f4f9ff;
         }
+
+        @media (max-width: 760px) {
+            .accounts-form-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
@@ -120,6 +196,66 @@
     </div>
 
     @include('partials.flash')
+
+    @if (auth()->user()?->canManageDashboard())
+        <section class="accounts-create-card">
+            <h2>Nieuw account toevoegen</h2>
+            <p>Vul de gegevens in en sla het account op met gekoppeld medewerker-profiel.</p>
+
+            @if ($errors->any())
+                <div class="alert alert-error" role="alert">
+                    {{ $errors->first() }}
+                </div>
+            @endif
+
+            <form class="accounts-form" action="{{ route('accounts.store') }}" method="post">
+                @csrf
+
+                <div class="accounts-form-grid">
+                    <label>
+                        Gebruikersnaam
+                        <input type="text" name="name" value="{{ old('name') }}" required>
+                    </label>
+
+                    <label>
+                        E-mailadres
+                        <input type="email" name="email" value="{{ old('email') }}" required>
+                    </label>
+
+                    <label>
+                        Rol
+                        <select name="role" required>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role }}" @selected(old('role', 'Reisadviseur') === $role)>{{ $role }}</option>
+                            @endforeach
+                        </select>
+                    </label>
+
+                    <label>
+                        Functie (medewerker)
+                        <input type="text" name="functie" value="{{ old('functie') }}" required>
+                    </label>
+
+                    <label>
+                        Telefoon (optioneel)
+                        <input type="text" name="telefoon" value="{{ old('telefoon') }}">
+                    </label>
+
+                    <label>
+                        Wachtwoord
+                        <input type="password" name="password" required>
+                    </label>
+
+                    <label>
+                        Wachtwoord bevestigen
+                        <input type="password" name="password_confirmation" required>
+                    </label>
+                </div>
+
+                <button type="submit">Nieuw account opslaan</button>
+            </form>
+        </section>
+    @endif
 
     <div class="accounts-table-wrap">
         <table class="accounts-table">

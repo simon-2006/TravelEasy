@@ -23,6 +23,10 @@ Route::get('/accounts', [AccountController::class, 'index'])
     ->middleware(['auth', 'can:view-account-overview'])
     ->name('accounts.index');
 
+Route::post('/accounts', [AccountController::class, 'store'])
+    ->middleware(['auth', 'can:manage-dashboard'])
+    ->name('accounts.store');
+
 Route::middleware(['auth', 'can:manage-dashboard'])
     ->prefix('management')
     ->name('management.')
